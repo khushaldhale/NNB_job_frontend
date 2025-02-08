@@ -9,7 +9,6 @@ import {
 const JobsPresentation = ({
   jobs,
   isLoading,
-  isError,
   deleteJobs,
   userInfo,
   applyJobs,
@@ -25,14 +24,6 @@ const JobsPresentation = ({
           <span className="visually-hidden">Loading...</span>
         </div>
         <p className="mt-3 text-muted">Loading jobs...</p>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="alert alert-danger m-4" role="alert">
-        <p className="mb-0">Error loading jobs. Please try again later.</p>
       </div>
     );
   }
@@ -137,8 +128,7 @@ const JobsPresentation = ({
                       </>
                     ) : (
                       // user buttons
-
-                      !requiredPath === "applied" && (
+                      requiredPath === "jobs" && (
                         <button
                           className="btn btn-primary w-100"
                           onClick={() => applyJobs({ _id: job._id })}

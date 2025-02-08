@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { anticipate, motion, spring } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { anticipate, motion } from "framer-motion";
 import {
   BriefcaseIcon,
   Users2Icon,
@@ -13,9 +13,37 @@ import {
   ArrowRightIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllJobs } from "../redux/slices/jobSlice";
+import { toast } from "react-toastify";
 
 const Home = () => {
+  const jobs = useSelector((state) => {
+    return state.job.jobs;
+  });
   const navigate = useNavigate();
+  // refs are created for smooth scroll and bookmark concept
+  const contactRef = useRef();
+  const jobRef = useRef();
+  const dispatch = useDispatch();
+
+  //  we are not using the job Presentation component , as we want different UI here
+  //  so we are  creating our own for the job section
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch(getAllJobs()).then((action) => {
+        if (action.payload.success) {
+          toast.success(action.payload.message);
+        } else {
+          // no need to show errro as it  is homepage so it does not look good
+          //  No jobs are created will be shown there , code is written in UI component
+          // toast.error(action.payload.message);
+        }
+      });
+    };
+    fetchData();
+  }, []);
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
@@ -54,6 +82,10 @@ const Home = () => {
                   className="btn btn-primary btn-lg me-3 px-4 py-3"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    navigate("#jobs");
+                    jobRef.current?.scrollIntoView({ behavior: "smooth" });
+                  }}
                 >
                   Explore Opportunities{" "}
                   <ArrowRightIcon className="ms-2" size={20} />
@@ -63,7 +95,8 @@ const Home = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
-                    window.location.hash = "contact";
+                    navigate("#contact");
+                    contactRef.current?.scrollIntoView({ behavior: "smooth" });
                   }}
                 >
                   Contact Us
@@ -259,6 +292,7 @@ const Home = () => {
 
       {/* Featured Jobs Section */}
       <motion.section
+        ref={jobRef}
         className="py-5 bg-light"
         initial={{ opacity: 0, scaleY: 0.8 }}
         whileInView={{ opacity: 1, scaleY: 1 }}
@@ -279,12 +313,87 @@ const Home = () => {
                 className="btn btn-primary px-4"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  navigate("/dashboard/jobs");
+                }}
               >
                 View All Jobs <ArrowRightIcon size={16} className="ms-2" />
               </motion.button>
             </div>
           </motion.div>
           <div className="row g-4">
+            {jobs.length > 0 ? (
+              jobs.map((job, index) => (
+                <motion.div
+                  key={job}
+                  className="col-md-4"
+                  initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    duration: 0.6,
+                    delay: index * 0.2,
+                    ease: "easeOut",
+                  }}
+                >
+                  <motion.div
+                    className="card border-0 shadow-sm h-100"
+                    whileHover={{
+                      y: -10,
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                    }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="card-body p-4">
+                      <div className="d-flex align-items-center mb-4">
+                        <motion.div
+                          className="gradient-bg rounded p-3 me-3"
+                          initial={{ scale: 0.5 }}
+                          whileInView={{ scale: 1 }}
+                          transition={{
+                            duration: 0.6,
+                            delay: index * 0.2 + 0.3,
+                            type: "spring",
+                            stiffness: 120,
+                          }}
+                        >
+                          <BuildingIcon size={24} className="text-white" />
+                        </motion.div>
+                        <div>
+                          <h5 className="mb-1">{job.company_domain}</h5>
+                          <p className="text-muted mb-0">{job.company_name}</p>
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <span className="badge bg-primary me-2">
+                          {job.job_type}
+                        </span>
+                        <span className="badge bg-success">{job.job_mode}</span>
+                      </div>
+                      <motion.button
+                        className="btn btn-outline-primary w-100"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                          //  move it to authenticated job section
+                          // authentication applied at frontend not at backend for
+                          // /dashboard/jobs, to view  jobs and do manipulation over that
+
+                          navigate("/dashboard/jobs");
+                        }}
+                      >
+                        Apply Now
+                      </motion.button>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              ))
+            ) : (
+              <p>No job is created yet </p>
+            )}
+          </div>
+
+          {/* original */}
+          {/* <div className="row g-4">
             {[1, 2, 3].map((job, index) => (
               <motion.div
                 key={job}
@@ -340,12 +449,16 @@ const Home = () => {
                 </motion.div>
               </motion.div>
             ))}
-          </div>
+          </div> */}
         </div>
       </motion.section>
 
       {/* Contact Section */}
-      <section id="contact" className="contact-section py-5 text-white">
+      <section
+        ref={contactRef}
+        id="contact"
+        className="contact-section py-5 text-white"
+      >
         <div className="container py-5">
           <div className="row">
             {/* contact contents  */}

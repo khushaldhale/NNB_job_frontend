@@ -30,8 +30,6 @@ const AppliedJobs = () => {
   }, []);
   return (
     <div>
-      <p> All this are applied jobs</p>
-
       <JobsPresentation
         jobs={applied}
         isLoading={isLoading}

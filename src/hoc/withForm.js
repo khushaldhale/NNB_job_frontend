@@ -12,7 +12,7 @@ const withForm = (OldComponent, initialValues, thunk, url) => {
 
 		const dispatch = useDispatch()
 		const navigate = useNavigate()
-		console.log("hoc data : ", formData)
+
 
 
 		function changeHandler(event) {
@@ -27,7 +27,6 @@ const withForm = (OldComponent, initialValues, thunk, url) => {
 
 		function submitHandler(event) {
 			event.preventDefault()
-			console.log("hoc data submit : ", formData)
 			dispatch(thunk(formData))
 				.then((action) => {
 					if (action.payload.success) {
