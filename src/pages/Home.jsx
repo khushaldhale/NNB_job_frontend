@@ -34,7 +34,8 @@ const Home = () => {
     const fetchData = async () => {
       dispatch(getAllJobs()).then((action) => {
         if (action.payload.success) {
-          toast.success(action.payload.message);
+          // not good to show jobs fetched at home page
+          // toast.success(action.payload.message);
         } else {
           // no need to show errro as it  is homepage so it does not look good
           //  No jobs are created will be shown there , code is written in UI component

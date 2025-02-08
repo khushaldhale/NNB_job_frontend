@@ -16,44 +16,26 @@ const FilterApplications = () => {
 
   function changeHandler(event) {
     const { name, value } = event.target;
+    let thunk = null;
 
     if (value === "applications") {
-      dispatch(showApplications({ _id: params.id })).then((action) => {
-        if (action.payload.success) {
-          toast.success(action.payload.message);
-          setFilteredApplications(action.payload.data);
-        } else {
-          toast.error(action.payload.message);
-        }
-      });
+      thunk = showApplications;
     } else if (value === "shortlisted") {
-      dispatch(shortListed({ _id: params.id })).then((action) => {
-        if (action.payload.success) {
-          toast.success(action.payload.message);
-          setFilteredApplications(action.payload.data);
-        } else {
-          toast.error(action.payload.message);
-        }
-      });
+      thunk = shortListed;
     } else if (value === "pending") {
-      dispatch(pending({ _id: params.id })).then((action) => {
-        if (action.payload.success) {
-          toast.success(action.payload.message);
-          setFilteredApplications(action.payload.data);
-        } else {
-          toast.error(action.payload.message);
-        }
-      });
+      thunk = pending;
     } else if (value == "rejected") {
-      dispatch(rejected({ _id: params.id })).then((action) => {
-        if (action.payload.success) {
-          toast.success(action.payload.message);
-          setFilteredApplications(action.payload.data);
-        } else {
-          toast.error(action.payload.message);
-        }
-      });
+      thunk = rejected;
     }
+
+    dispatch(thunk({ _id: params.id })).then((action) => {
+      if (action.payload.success) {
+        toast.success(action.payload.message);
+        setFilteredApplications(action.payload.data);
+      } else {
+        toast.error(action.payload.message);
+      }
+    });
   }
 
   useEffect(() => {
