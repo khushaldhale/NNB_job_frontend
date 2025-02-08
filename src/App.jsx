@@ -15,6 +15,7 @@ import Home from "./pages/Home";
 import UpdateJob from "./components/jobs/UpdateJob";
 import AppliedJobs from "./components/jobs/appliedJobs/AppliedJobs";
 import { ToastContainer, toast } from "react-toastify";
+import FilterApplications from "./components/applications/filter/FilterApplications";
 
 function App() {
   // protected routes as   for admin and  for  user also
@@ -22,12 +23,12 @@ function App() {
     <div className="App">
       <Header></Header>
       <Routes>
-        <Route path="/" element={<Home></Home>}>
-          {" "}
-        </Route>
+        {/* open routes */}
+        <Route path="/" element={<Home></Home>} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 
+        {/* authenticated routes  */}
         <Route path="/dashboard" element={<DashBoard />}>
           <>
             <Route
@@ -54,6 +55,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            <Route
+              path="jobs/:id/applications/filter"
+              element={
+                <ProtectedRoute adminRoute={true}>
+                  <FilterApplications></FilterApplications>
+                </ProtectedRoute>
+              }
+            />
+
             <Route
               path="jobs/create"
               element={
@@ -91,6 +102,7 @@ function App() {
           </>
         </Route>
 
+        {/* Route for No URL */}
         <Route path="*" element={<NoFound></NoFound>}></Route>
       </Routes>
       <ToastContainer />

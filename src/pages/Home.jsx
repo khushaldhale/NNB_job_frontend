@@ -12,44 +12,10 @@ import {
   MailIcon,
   ArrowRightIcon,
 } from "lucide-react";
-
-const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 },
-};
-
-const staggerChildren = {
-  animate: {
-    transition: {
-      staggerChildren: 0.1,
-    },
-  },
-};
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  const [isVisible, setIsVisible] = useState({});
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            setIsVisible((prev) => ({
-              ...prev,
-              [entry.target.id]: true,
-            }));
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-
-    document.querySelectorAll(".fade-up").forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
-
+  const navigate = useNavigate();
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
@@ -96,6 +62,9 @@ const Home = () => {
                   className="btn btn-outline-light btn-lg px-4 py-3"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    window.location.hash = "contact";
+                  }}
                 >
                   Contact Us
                 </motion.button>
@@ -376,7 +345,7 @@ const Home = () => {
       </motion.section>
 
       {/* Contact Section */}
-      <section className="contact-section py-5 text-white">
+      <section id="contact" className="contact-section py-5 text-white">
         <div className="container py-5">
           <div className="row">
             {/* contact contents  */}

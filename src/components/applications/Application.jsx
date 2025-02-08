@@ -7,6 +7,7 @@ import {
   showApplications,
 } from "../../redux/slices/jobSlice";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const Application = () => {
   const applications = useSelector((state) => state.job.applications);
@@ -29,6 +30,14 @@ const Application = () => {
   return (
     <div className="container my-4">
       <h2 className="text-center mb-4">Job Applications</h2>
+
+      <Link
+        to={`/dashboard/jobs/${params.id}/applications/filter`}
+        className="btn btn-primary d-inline-flex align-items-center mb-3 gap-2"
+      >
+        <i className="bi bi-funnel"></i>
+        Filter Applications
+      </Link>
 
       {applications?.length > 0 ? (
         <div className="row gy-4">

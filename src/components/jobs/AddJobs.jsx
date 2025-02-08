@@ -96,7 +96,7 @@ const AddJobs = ({ changeHandler, formData }) => {
   }
 
   return (
-    <div className="container mt-5">
+    <div className="container mt-3">
       <h2 className="text-center mb-4">Post a New Job</h2>
       <form onSubmit={modifiedHandler} className="card p-4">
         <div className="row mb-3">

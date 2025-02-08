@@ -13,8 +13,9 @@ const DashSideBar = () => {
     return state.auth.userInfo;
   });
 
+  // position-sticky top-0
   return (
-    <div className="bg-white border-end vh-100 position-sticky top-0 pt-4">
+    <div className="bg-white border-end vh-100  pt-4">
       <div className="px-4 pb-4 border-bottom">
         <div className="d-flex align-items-center gap-2">
           <BriefcaseIcon size={28} className="text-primary" />
