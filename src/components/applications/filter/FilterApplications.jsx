@@ -13,6 +13,7 @@ const FilterApplications = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const [filteredApplications, setFilteredApplications] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 500);
 
   function changeHandler(event) {
     const { name, value } = event.target;
@@ -50,6 +51,13 @@ const FilterApplications = () => {
       });
     };
     getApplications();
+
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 500);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -79,13 +87,15 @@ const FilterApplications = () => {
                   key={index}
                   className="list-group-item list-group-item-action d-flex align-items-center justify-content-between"
                 >
-                  <div className="d-flex align-items-center">
-                    <div
-                      className="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
-                      style={{ width: "40px", height: "40px" }}
-                    >
-                      {element.fname[0]}
-                    </div>
+                  <div className=" d-flex align-items-center">
+                    {!isMobile && (
+                      <div
+                        className=" rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        {element.fname[0]}
+                      </div>
+                    )}
                     <div className="ms-3">
                       <h6 className="mb-0">
                         {element.fname + " " + element.lname}
@@ -95,19 +105,6 @@ const FilterApplications = () => {
                       )}
                     </div>
                   </div>
-                  <span
-                    className={`badge ${
-                      element.status === "shortlisted"
-                        ? "bg-success"
-                        : element.status === "pending"
-                        ? "bg-warning"
-                        : element.status === "rejected"
-                        ? "bg-danger"
-                        : "bg-primary"
-                    }`}
-                  >
-                    {element.status || "New"}
-                  </span>
                 </div>
               ))
             ) : (

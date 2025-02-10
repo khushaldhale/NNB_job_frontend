@@ -270,21 +270,24 @@ const UpdateJob = () => {
 
         <div className="mb-3">
           <label className="form-label">Required Skills</label>
-          <div className="input-group w-100">
-            <input
-              ref={skillRef}
-              type="text"
-              className="form-control  "
-              placeholder="Add a skill"
-            />
-            <button
-              type="button"
-              id="skills_required"
-              className="btn btn-primary w-25 mx-3"
-              onClick={changeHandler}
-            >
-              Add Skill
-            </button>
+          <div className="row g-2">
+            <div className="col-md-9">
+              <input
+                ref={skillRef}
+                type="text"
+                className="form-control"
+                placeholder="Add a skill"
+              />
+            </div>
+            <div className="col-md-3 d-flex justify-content-center">
+              <button
+                type="button"
+                className="btn btn-primary w-75 "
+                onClick={changeHandler}
+              >
+                Add Skill
+              </button>
+            </div>
           </div>
           <div className="mb-3">
             <ol className="text-muted">
@@ -297,24 +300,25 @@ const UpdateJob = () => {
 
         <div className="mb-3">
           <label className="form-label">Responsibilities</label>
-          <div className="input-group">
-            <input
-              ref={responsibilityRef}
-              type="text"
-              className="form-control"
-              placeholder="Add a responsibility"
-            />
-            <button
-              type="button"
-              id="responsibilities"
-              className="btn btn-primary w-25 mx-3"
-              onClick={changeHandler}
-            >
-              Add Responsibility
-            </button>
+          <div className="row g-2">
+            <div className="col-md-9">
+              <input
+                ref={responsibilityRef}
+                type="text"
+                className="form-control"
+                placeholder="Add a responsibility"
+              />
+            </div>
+            <div className="col-md-3 d-flex justify-content-center">
+              <button
+                type="button"
+                className="btn btn-primary w-75"
+                onClick={changeHandler}
+              >
+                Add Responsibility
+              </button>
+            </div>
           </div>
-
-          {/*   */}
           <div className="mb-3">
             <ol className="text-muted">
               {formData.responsibilities.map((responsibility, index) => (
@@ -325,7 +329,7 @@ const UpdateJob = () => {
         </div>
 
         <div className="d-flex w-100 justify-content-center align-items-center">
-          <button type="submit" className="btn btn-success w-25">
+          <button type="submit" className="btn btn-success w-50">
             Update Job
           </button>
         </div>

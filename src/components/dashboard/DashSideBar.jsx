@@ -7,66 +7,72 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
-const DashSideBar = () => {
+const DashSideBar = ({ isMobile }) => {
   const location = useLocation();
   const userInfo = useSelector((state) => {
     return state.auth.userInfo;
   });
 
-  // position-sticky top-0
   return (
-    <div className="bg-white border-end vh-100  pt-4">
-      <div className="px-4 pb-4 border-bottom">
-        <div className="d-flex align-items-center gap-2">
-          <BriefcaseIcon size={28} className="text-primary" />
-          <span className="fs-4 fw-bold text-primary">JobHub</span>
-        </div>
-      </div>
-
-      <div className="nav flex-column nav-pills p-3 gap-2">
+    <div className="bg-white border-end vh-100 pt-4">
+      <div
+        className={`nav flex-column nav-pills gap-2  ${
+          isMobile ? "p-1" : "p-3"
+        }`}
+      >
         <Link
           to="/dashboard/jobs"
-          className={`nav-link d-flex align-items-center gap-2 ${
-            location.pathname === "/dashboard/jobs" ? "active" : ""
-          }`}
+          className={`nav-link d-flex ${
+            isMobile ? "justify-content-center  " : "align-items-center gap-2"
+          } ${location.pathname === "/dashboard/jobs" ? "active" : ""}`}
+          title={isMobile ? "Dashboard" : ""}
         >
           <LayoutDashboardIcon size={18} />
-          <span>Dashboard</span>
+          {!isMobile && <span>Dashboard</span>}
         </Link>
 
         {userInfo.accountType === "admin" ? (
           <>
             <Link
               to="/dashboard/jobs/create"
-              className={`nav-link d-flex align-items-center gap-2 ${
+              className={`nav-link d-flex ${
+                isMobile ? "justify-content-center" : "align-items-center gap-2"
+              } ${
                 location.pathname === "/dashboard/jobs/create" ? "active" : ""
               }`}
+              title={isMobile ? "Post New Job" : ""}
             >
               <PlusSquareIcon size={18} />
-              <span>Post New Job</span>
+              {!isMobile && <span>Post New Job</span>}
             </Link>
 
             <Link
               to="/dashboard/jobs/applications"
-              className={`nav-link d-flex align-items-center gap-2 ${
+              className={`nav-link d-flex ${
+                isMobile ? "justify-content-center" : "align-items-center gap-2"
+              } ${
                 location.pathname === "/dashboard/jobs/applications"
                   ? "active"
                   : ""
               }`}
+              title={isMobile ? "Applications" : ""}
             >
               <ClipboardListIcon size={18} />
-              <span>Applications</span>
+              {!isMobile && <span>Applications</span>}
             </Link>
           </>
         ) : (
           <Link
             to="/dashboard/jobs/applied"
-            className={`nav-link d-flex align-items-center gap-2 ${
+            className={`nav-link d-flex ${
+              isMobile ? "justify-content-center" : "align-items-center gap-2"
+            } ${
               location.pathname === "/dashboard/jobs/applied" ? "active" : ""
             }`}
+            title={isMobile ? "Applied Jobs" : ""}
           >
             <LayoutDashboardIcon size={18} />
-            <span>Applied Jobs</span>
+            {!isMobile && <span>Applied Jobs</span>}
           </Link>
         )}
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { anticipate, motion } from "framer-motion";
 import {
   BriefcaseIcon,
@@ -27,9 +27,56 @@ const Home = () => {
   const jobRef = useRef();
   const dispatch = useDispatch();
 
+  // collecting contact details
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  function changeHandler(event) {
+    const { name, value } = event.target;
+    setFormData((prevData) => {
+      return {
+        ...prevData,
+        [name]: value,
+      };
+    });
+  }
+
+  async function submitContact(event) {
+    event.preventDefault();
+
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/contact`,
+      {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      }
+    );
+
+    if (!response.ok) {
+      const erroData = await response.json();
+      toast.error(erroData.message);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      return;
+    }
+
+    const res = await response.json();
+    toast.success(res.message);
+    setFormData({ name: "", email: "", subject: "", message: "" });
+
+    return;
+  }
+
   //  we are not using the job Presentation component , as we want different UI here
   //  so we are  creating our own for the job section
-
   useEffect(() => {
     const fetchData = async () => {
       dispatch(getAllJobs()).then((action) => {
@@ -45,6 +92,7 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
@@ -517,7 +565,7 @@ const Home = () => {
                   duration: 0.7,
                 }}
               >
-                <form>
+                <form onSubmit={submitContact}>
                   <div className="row g-4">
                     <div className="col-md-6">
                       <motion.input
@@ -525,6 +573,9 @@ const Home = () => {
                         className="form-control contact-input"
                         placeholder="Your Name"
                         whileFocus={{ scale: 1.02 }}
+                        name="name"
+                        onChange={changeHandler}
+                        value={formData.name}
                       />
                     </div>
                     <div className="col-md-6">
@@ -533,6 +584,9 @@ const Home = () => {
                         className="form-control contact-input"
                         placeholder="Your Email"
                         whileFocus={{ scale: 1.02 }}
+                        name="email"
+                        onChange={changeHandler}
+                        value={formData.email}
                       />
                     </div>
                     <div className="col-12">
@@ -541,6 +595,9 @@ const Home = () => {
                         className="form-control contact-input"
                         placeholder="Subject"
                         whileFocus={{ scale: 1.02 }}
+                        name="subject"
+                        onChange={changeHandler}
+                        value={formData.subject}
                       />
                     </div>
                     <div className="col-12">
@@ -549,6 +606,9 @@ const Home = () => {
                         rows={4}
                         placeholder="Your Message"
                         whileFocus={{ scale: 1.02 }}
+                        name="message"
+                        onChange={changeHandler}
+                        value={formData.message}
                       ></motion.textarea>
                     </div>
                     <div className="col-12">
@@ -668,7 +728,16 @@ const Home = () => {
                 Subscribe to our newsletter for the latest job updates and
                 career tips.
               </p>
-              <form className="mb-3">
+              <form
+                className="mb-3"
+                onSubmit={(event) => {
+                  // api integration work will be done later
+                  event.preventDefault();
+                  toast.success(
+                    "onwards you will get notifications regarding the jobs from us"
+                  );
+                }}
+              >
                 <div className="input-group">
                   <motion.input
                     type="email"
